@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        *{
+            font-size: xx-large;
+        }
+        .login_box {
+            width: 500px;
+            margin: 200px auto;
+            padding: 20px;
+            padding-right: 45px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .error_msg {
+            color: red;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .CAP{
+            display: flex;
+            margin: 19px 0;
+        }
+
+        #cap_txt{
+            padding: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type='text'],
+        input[type='password'],
+        .captcha-text {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .captcha-text {
+            background-color: #f9f9f9;
+            text-align: center;
+            /* width: fit-content; */
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;  
+            /* background-color: #007bff; */
+            /* color: #fff; */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const Login = () => {
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [captcha, setCaptcha] = useState('');
+            const [errorMessage, setErrorMessage] = useState('');
+
+            useEffect(() => {
+                generateCaptcha();
+            }, []);
+
+            const generateCaptcha = () => {
+                const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let captcha = '';
+                for (let i = 0; i < 6; i++) {
+                    captcha += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+                }
+                setCaptcha(captcha);
+            };
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                console.log('Logging in with:', username, password);
+                setErrorMessage('');
+            };
+
+            return (
+                <div className="login_box">
+                    <h2>Login</h2>
+                    {errorMessage && <p className="error_msg">{errorMessage}</p>}
+                    <form onSubmit={handleLogin}>
+                        <div className="form-group">
+                            <label htmlFor="username">Username:</label>
+                            <input
+                                type="text"
+                                id="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Password:</label>
+                            <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <div class="CAP">
+                                <label htmlFor="captcha" id="cap_txt">Captcha:</label>
+                                <div className="captcha-text">{captcha}</div>
+                            </div>
+                            <input type="text" />
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<Login />, document.getElementById('root'));
+    </script>
+</body>
+
+</html>
